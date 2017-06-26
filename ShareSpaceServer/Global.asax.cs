@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShareSpaceServer.MessageHandlers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +13,9 @@ namespace ShareSpaceServer
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+
+            // Add Authentication Message Handler to authenticate every HTTP request to this Server.
+            GlobalConfiguration.Configuration.MessageHandlers.Add(new AuthenticationHandler());
         }
     }
 }
