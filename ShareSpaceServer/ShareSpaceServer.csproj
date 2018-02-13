@@ -23,6 +23,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,6 +57,8 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Device" />
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.1.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.1.4\lib\net451\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
@@ -90,21 +93,54 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\HousingController.cs" />
+    <Compile Include="Controllers\ShareHousingController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="DBMapping\DBShareSpace.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBShareSpace.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SearchShareHousingDataModel.cs" />
+    <Compile Include="MyGeoLocation.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="MessageHandlers\AuthenticationHandler.cs" />
+    <Compile Include="Models\HistoryHousingNoteModel.cs" />
+    <Compile Include="Models\HistoryHousingPhotoModel.cs" />
+    <Compile Include="Models\HistoryShareHousingNoteModel.cs" />
+    <Compile Include="Models\HistoryShareHousingPhotoModel.cs" />
+    <Compile Include="Models\HousingAppointmentModel.cs" />
+    <Compile Include="Models\HousingModel.cs" />
+    <Compile Include="Models\NoteModel.cs" />
+    <Compile Include="Models\SavedHousingModel.cs" />
+    <Compile Include="Models\SavedShareHousingModel.cs" />
+    <Compile Include="Models\SearchHousingDataModel.cs" />
+    <Compile Include="Models\ShareHousingAppointmentModel.cs" />
+    <Compile Include="Models\ShareHousingModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\ShareSpaceAPIPrincipal.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="DBMapping\DBShareSpace.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DBShareSpace.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="DBMapping\DBShareSpace.dbml.layout">
+      <DependentUpon>DBShareSpace.dbml</DependentUpon>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -114,7 +150,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

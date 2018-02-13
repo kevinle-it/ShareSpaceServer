@@ -120,7 +120,7 @@ namespace ShareSpaceServer.MessageHandlers
                 dynamic result = JsonConvert.DeserializeObject<dynamic>(claimsDict.FirstOrDefault(x => x.Key == "firebase").Value);
                 string userEmail = result.identities.email[0];
 
-                // Get User ID (issued by Firebase).
+                // Get User UID (issued by Firebase).
                 string userID = claimsDict.FirstOrDefault(x => x.Key == "user_id").Value;
 
                 if (isValidToken)
@@ -128,7 +128,11 @@ namespace ShareSpaceServer.MessageHandlers
                     SetPrincipal(new ShareSpaceAPIPrincipal(userEmail, userID));
                 }
             }
-
+            // Allow the request to be processed further down the pipeline.
+            // Endpoints with [Authorize] attribute will verifies the request's IPrincipal (set above)
+            // It will checks its Identity.IsAuthenticated property (in ShareSpaceAPIPrincipal)
+            // and returns a 401 Unauthorized HTTP status if the value is false (No Principal set)
+            // and the requested action method will not be executed.
             HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
 
             if (response.StatusCode == HttpStatusCode.Unauthorized)

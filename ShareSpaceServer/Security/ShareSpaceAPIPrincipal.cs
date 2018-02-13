@@ -8,15 +8,16 @@ namespace ShareSpaceServer.Security
 {
     public class ShareSpaceAPIPrincipal : IPrincipal
     {
-        public ShareSpaceAPIPrincipal(string username, string userID)
+        public ShareSpaceAPIPrincipal(string userEmail, string userID)
         {
-            Username = username;
+            UserEmail = userEmail;
             UserID = userID;
-            Identity = new GenericIdentity(username);
+            Identity = new GenericIdentity(userEmail);
         }
 
-        public string Username { get; set; }
+        public string UserEmail { get; set; }
 
+        // UserID issued by Firebase.
         public string UserID { get; set; }
 
         public IIdentity Identity { get; set; }

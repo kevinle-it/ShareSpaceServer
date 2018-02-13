@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ShareSpace" Class="DBShareSpaceDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=ShareSpace.mssql.somee.com;Initial Catalog=ShareSpace;Persist Security Info=True;User ID=lmtri1995_SQLLogin_1" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ShareSpaceConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Address" Member="Addresses">
+    <Type Name="Address">
+      <Column Name="AddressID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="HouseNumber" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="Street" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="Ward" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="District" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="CityID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LocationID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Address_Housing" Member="Housings" ThisKey="AddressID" OtherKey="AddressID" Type="Housing" />
+      <Association Name="Address_ShareSpaceUser" Member="ShareSpaceUsers" ThisKey="AddressID" OtherKey="AddressID" Type="ShareSpaceUser" />
+      <Association Name="City_Address" Member="City" ThisKey="CityID" OtherKey="CityID" Type="City" IsForeignKey="true" />
+      <Association Name="GeoLocation_Address" Member="GeoLocation" ThisKey="LocationID" OtherKey="LocationID" Type="GeoLocation" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Album" Member="Albums">
+    <Type Name="Album">
+      <Column Name="HousingID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ShareHousingID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AlbumID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AlbumName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="DateTimeCreated" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Association Name="Album_Photo" Member="Photos" ThisKey="AlbumID" OtherKey="AlbumID" Type="Photo" />
+      <Association Name="Housing_Album" Member="Housing" ThisKey="HousingID" OtherKey="HousingID" Type="Housing" IsForeignKey="true" />
+      <Association Name="ShareSpaceUser_Album" Member="ShareSpaceUser" ThisKey="CreatorID" OtherKey="UserID" Type="ShareSpaceUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.City" Member="Cities">
+    <Type Name="City">
+      <Column Name="CityID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CityName" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Association Name="City_Address" Member="Addresses" ThisKey="CityID" OtherKey="CityID" Type="Address" />
+      <Association Name="City_ShareSpaceUser" Member="ShareSpaceUsers" ThisKey="CityID" OtherKey="HometownID" Type="ShareSpaceUser" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Comment" Member="Comments">
+    <Type Name="Comment">
+      <Column Name="CommentID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CommentContent" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="DateTimeCreated" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Column Name="HousingID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Housing_Comment" Member="Housing" ThisKey="HousingID" OtherKey="HousingID" Type="Housing" IsForeignKey="true" />
+      <Association Name="ShareSpaceUser_Comment" Member="ShareSpaceUser" ThisKey="UserID" OtherKey="UserID" Type="ShareSpaceUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Conversation" Member="Conversations">
+    <Type Name="Conversation">
+      <Column Name="ConversationID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RecipientID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DateTimeCreated" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Association Name="Conversation_Message" Member="Messages" ThisKey="ConversationID" OtherKey="ConversationID" Type="Message" />
+      <Association Name="ShareSpaceUser_Conversation" Member="ShareSpaceUser" ThisKey="CreatorID" OtherKey="UserID" Type="ShareSpaceUser" IsForeignKey="true" />
+      <Association Name="ShareSpaceUser_Conversation1" Member="ShareSpaceUser1" ThisKey="RecipientID" OtherKey="UserID" Type="ShareSpaceUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Email" Member="Emails">
+    <Type Name="Email">
+      <Column Name="DomainID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LocalPart" Type="System.String" DbType="VarChar(64) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EmailID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Association Name="Email_ShareSpaceUser" Member="ShareSpaceUsers" ThisKey="EmailID" OtherKey="EmailID" Type="ShareSpaceUser" />
+      <Association Name="EmailDomain_Email" Member="EmailDomain" ThisKey="DomainID" OtherKey="DomainID" Type="EmailDomain" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EmailDomain" Member="EmailDomains">
+    <Type Name="EmailDomain">
+      <Column Name="DomainID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DomainName" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="EmailDomain_Email" Member="Emails" ThisKey="DomainID" OtherKey="DomainID" Type="Email" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Gender" Member="Genders">
+    <Type Name="Gender">
+      <Column Name="GenderID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="GenderType" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Association Name="Gender_ShareHousing" Member="ShareHousings" ThisKey="GenderID" OtherKey="RequiredGenderID" Type="ShareHousing" />
+      <Association Name="Gender_ShareSpaceUser" Member="ShareSpaceUsers" ThisKey="GenderID" OtherKey="GenderID" Type="ShareSpaceUser" />
+    </Type>
+  </Table>
+  <Table Name="dbo.GeoLocation" Member="GeoLocations">
+    <Type Name="GeoLocation">
+      <Column Name="Latitude" Type="System.Decimal" DbType="Decimal(10,8) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Longitude" Type="System.Decimal" DbType="Decimal(11,8) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LocationID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Association Name="GeoLocation_Address" Member="Addresses" ThisKey="LocationID" OtherKey="LocationID" Type="Address" />
+    </Type>
+  </Table>
+  <Table Name="dbo.HouseType" Member="HouseTypes">
+    <Type Name="HouseType">
+      <Column Name="HouseTypeID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="HousingType" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Association Name="HouseType_Housing" Member="Housings" ThisKey="HouseTypeID" OtherKey="HouseTypeID" Type="Housing" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Housing" Member="Housings">
+    <Type Name="Housing">
+      <Column Name="HousingID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OwnerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsAvailable" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsExist" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="HouseTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DateTimeCreated" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Column Name="DateTimeExpired" Type="System.DateTimeOffset" DbType="DateTimeOffset" CanBeNull="true" />
+      <Column Name="NumOfView" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NumOfSaved" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NumOfPeople" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NumOfRoom" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NumOfBed" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NumOfBath" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AllowPet" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="HasWifi" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="HasAC" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="HasParking" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="TimeRestriction" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="Area" Type="System.Decimal" DbType="Decimal(8,2) NOT NULL" CanBeNull="false" />
+      <Column Name="AddressID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="NumOfComment" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Housing_Album" Member="Albums" ThisKey="HousingID" OtherKey="HousingID" Type="Album" />
+      <Association Name="Housing_Comment" Member="Comments" ThisKey="HousingID" OtherKey="HousingID" Type="Comment" />
+      <Association Name="Housing_HousingAppointment" Member="HousingAppointments" ThisKey="HousingID" OtherKey="HousingID" Type="HousingAppointment" />
+      <Association Name="Housing_Note" Member="Notes" ThisKey="HousingID" OtherKey="HousingID" Type="Note" />
+      <Association Name="Housing_SavedHousing" Member="SavedHousings" ThisKey="HousingID" OtherKey="HousingID" Type="SavedHousing" />
+      <Association Name="Housing_ShareHousing" Member="ShareHousings" ThisKey="HousingID" OtherKey="HousingID" Type="ShareHousing" />
+      <Association Name="Address_Housing" Member="Address" ThisKey="AddressID" OtherKey="AddressID" Type="Address" IsForeignKey="true" />
+      <Association Name="HouseType_Housing" Member="HouseType" ThisKey="HouseTypeID" OtherKey="HouseTypeID" Type="HouseType" IsForeignKey="true" />
+      <Association Name="ShareSpaceUser_Housing" Member="ShareSpaceUser" ThisKey="OwnerID" OtherKey="UserID" Type="ShareSpaceUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.HousingAppointment" Member="HousingAppointments">
+    <Type Name="HousingAppointment">
+      <Column Name="HousingID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SenderID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RecipientID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AppointmentDateTime" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Column Name="DateTimeCreated" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Column Name="Content" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="IsOwnerConfirmed" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsUserConfirmed" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="NumOfRequests" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Housing_HousingAppointment" Member="Housing" ThisKey="HousingID" OtherKey="HousingID" Type="Housing" IsForeignKey="true" />
+      <Association Name="ShareSpaceUser_HousingAppointment" Member="ShareSpaceUser" ThisKey="SenderID" OtherKey="UserID" Type="ShareSpaceUser" IsForeignKey="true" />
+      <Association Name="ShareSpaceUser_HousingAppointment1" Member="ShareSpaceUser1" ThisKey="RecipientID" OtherKey="UserID" Type="ShareSpaceUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Message" Member="Messages">
+    <Type Name="Message">
+      <Column Name="MessageID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ConversationID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SenderID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DateTimeSend" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Column Name="DateTimeRead" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Association Name="Conversation_Message" Member="Conversation" ThisKey="ConversationID" OtherKey="ConversationID" Type="Conversation" IsForeignKey="true" />
+      <Association Name="ShareSpaceUser_Message" Member="ShareSpaceUser" ThisKey="SenderID" OtherKey="UserID" Type="ShareSpaceUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Note" Member="Notes">
+    <Type Name="Note">
+      <Column Name="HousingID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ShareHousingID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NoteName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Content" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="DateTimeCreated" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Association Name="Housing_Note" Member="Housing" ThisKey="HousingID" OtherKey="HousingID" Type="Housing" IsForeignKey="true" />
+      <Association Name="ShareSpaceUser_Note" Member="ShareSpaceUser" ThisKey="CreatorID" OtherKey="UserID" Type="ShareSpaceUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Photo" Member="Photos">
+    <Type Name="Photo">
+      <Column Name="PhotoID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PhotoName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="DateTimeCreated" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Column Name="AlbumID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="PhotoLink" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Association Name="Album_Photo" Member="Album" ThisKey="AlbumID" OtherKey="AlbumID" Type="Album" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SavedHousing" Member="SavedHousings">
+    <Type Name="SavedHousing">
+      <Column Name="HousingID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DateTimeCreated" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Association Name="Housing_SavedHousing" Member="Housing" ThisKey="HousingID" OtherKey="HousingID" Type="Housing" IsForeignKey="true" />
+      <Association Name="ShareSpaceUser_SavedHousing" Member="ShareSpaceUser" ThisKey="CreatorID" OtherKey="UserID" Type="ShareSpaceUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SavedShareHousing" Member="SavedShareHousings">
+    <Type Name="SavedShareHousing">
+      <Column Name="ShareHousingID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DateTimeCreated" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Association Name="ShareHousing_SavedShareHousing" Member="ShareHousing" ThisKey="ShareHousingID" OtherKey="ShareHousingID" Type="ShareHousing" IsForeignKey="true" />
+      <Association Name="ShareSpaceUser_SavedShareHousing" Member="ShareSpaceUser" ThisKey="CreatorID" OtherKey="UserID" Type="ShareSpaceUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.School" Member="Schools">
+    <Type Name="School">
+      <Column Name="SchoolID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SchoolName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="SchoolTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="School_ShareSpaceUser" Member="ShareSpaceUsers" ThisKey="SchoolID" OtherKey="SchoolID" Type="ShareSpaceUser" />
+      <Association Name="SchoolType_School" Member="SchoolType" ThisKey="SchoolTypeID" OtherKey="SchoolTypeID" Type="SchoolType" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SchoolType" Member="SchoolTypes">
+    <Type Name="SchoolType">
+      <Column Name="SchoolTypeID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SchoolTypeName" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Association Name="SchoolType_School" Member="Schools" ThisKey="SchoolTypeID" OtherKey="SchoolTypeID" Type="School" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ShareHousing" Member="ShareHousings">
+    <Type Name="ShareHousing">
+      <Column Name="ShareHousingID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="HousingID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsAvailable" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="PricePerMonthOfOne" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="NumOfView" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NumOfSaved" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RequiredNumOfPeople" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RequiredGenderID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RequiredWorkID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AllowSmoking" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="AllowAlcohol" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="HasPrivateKey" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DateTimeCreated" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Column Name="DateTimeExpired" Type="System.DateTimeOffset" DbType="DateTimeOffset" CanBeNull="true" />
+      <Association Name="ShareHousing_SavedShareHousing" Member="SavedShareHousings" ThisKey="ShareHousingID" OtherKey="ShareHousingID" Type="SavedShareHousing" />
+      <Association Name="ShareHousing_ShareHousingAppointment" Member="ShareHousingAppointments" ThisKey="ShareHousingID" OtherKey="ShareHousingID" Type="ShareHousingAppointment" />
+      <Association Name="Gender_ShareHousing" Member="Gender" ThisKey="RequiredGenderID" OtherKey="GenderID" Type="Gender" IsForeignKey="true" />
+      <Association Name="Housing_ShareHousing" Member="Housing" ThisKey="HousingID" OtherKey="HousingID" Type="Housing" IsForeignKey="true" />
+      <Association Name="ShareSpaceUser_ShareHousing" Member="ShareSpaceUser" ThisKey="CreatorID" OtherKey="UserID" Type="ShareSpaceUser" IsForeignKey="true" />
+      <Association Name="Work_ShareHousing" Member="Work" ThisKey="RequiredWorkID" OtherKey="WorkID" Type="Work" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ShareHousingAppointment" Member="ShareHousingAppointments">
+    <Type Name="ShareHousingAppointment">
+      <Column Name="ShareHousingID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SenderID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RecipientID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AppointmentDateTime" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Column Name="DateTimeCreated" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Column Name="Content" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="IsCreatorConfirmed" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsUserConfirmed" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="NumOfRequests" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="ShareHousing_ShareHousingAppointment" Member="ShareHousing" ThisKey="ShareHousingID" OtherKey="ShareHousingID" Type="ShareHousing" IsForeignKey="true" />
+      <Association Name="ShareSpaceUser_ShareHousingAppointment" Member="ShareSpaceUser" ThisKey="SenderID" OtherKey="UserID" Type="ShareSpaceUser" IsForeignKey="true" />
+      <Association Name="ShareSpaceUser_ShareHousingAppointment1" Member="ShareSpaceUser1" ThisKey="RecipientID" OtherKey="UserID" Type="ShareSpaceUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ShareSpaceUser" Member="ShareSpaceUsers">
+    <Type Name="ShareSpaceUser">
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UID" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ProfilePhotoURL" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="LastName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="GenderID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DOB" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PhoneNumber" Type="System.String" DbType="VarChar(11)" CanBeNull="true" />
+      <Column Name="AddressID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SchoolID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="StartSchoolYear" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="WorkID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="HometownID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="NumOfNote" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DateTimeCreated" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Column Name="DeviceTokens" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="ShareSpaceUser_Album" Member="Albums" ThisKey="UserID" OtherKey="CreatorID" Type="Album" />
+      <Association Name="ShareSpaceUser_Comment" Member="Comments" ThisKey="UserID" OtherKey="UserID" Type="Comment" />
+      <Association Name="ShareSpaceUser_Conversation" Member="Conversations" ThisKey="UserID" OtherKey="CreatorID" Type="Conversation" />
+      <Association Name="ShareSpaceUser_Conversation1" Member="Conversations1" ThisKey="UserID" OtherKey="RecipientID" Type="Conversation" />
+      <Association Name="ShareSpaceUser_Housing" Member="Housings" ThisKey="UserID" OtherKey="OwnerID" Type="Housing" />
+      <Association Name="ShareSpaceUser_HousingAppointment" Member="HousingAppointments" ThisKey="UserID" OtherKey="SenderID" Type="HousingAppointment" />
+      <Association Name="ShareSpaceUser_HousingAppointment1" Member="HousingAppointments1" ThisKey="UserID" OtherKey="RecipientID" Type="HousingAppointment" />
+      <Association Name="ShareSpaceUser_Message" Member="Messages" ThisKey="UserID" OtherKey="SenderID" Type="Message" />
+      <Association Name="ShareSpaceUser_Note" Member="Notes" ThisKey="UserID" OtherKey="CreatorID" Type="Note" />
+      <Association Name="ShareSpaceUser_SavedHousing" Member="SavedHousings" ThisKey="UserID" OtherKey="CreatorID" Type="SavedHousing" />
+      <Association Name="ShareSpaceUser_SavedShareHousing" Member="SavedShareHousings" ThisKey="UserID" OtherKey="CreatorID" Type="SavedShareHousing" />
+      <Association Name="ShareSpaceUser_ShareHousing" Member="ShareHousings" ThisKey="UserID" OtherKey="CreatorID" Type="ShareHousing" />
+      <Association Name="ShareSpaceUser_ShareHousingAppointment" Member="ShareHousingAppointments" ThisKey="UserID" OtherKey="SenderID" Type="ShareHousingAppointment" />
+      <Association Name="ShareSpaceUser_ShareHousingAppointment1" Member="ShareHousingAppointments1" ThisKey="UserID" OtherKey="RecipientID" Type="ShareHousingAppointment" />
+      <Association Name="Address_ShareSpaceUser" Member="Address" ThisKey="AddressID" OtherKey="AddressID" Type="Address" IsForeignKey="true" />
+      <Association Name="City_ShareSpaceUser" Member="City" ThisKey="HometownID" OtherKey="CityID" Type="City" IsForeignKey="true" />
+      <Association Name="Email_ShareSpaceUser" Member="Email" ThisKey="EmailID" OtherKey="EmailID" Type="Email" IsForeignKey="true" />
+      <Association Name="Gender_ShareSpaceUser" Member="Gender" ThisKey="GenderID" OtherKey="GenderID" Type="Gender" IsForeignKey="true" />
+      <Association Name="School_ShareSpaceUser" Member="School" ThisKey="SchoolID" OtherKey="SchoolID" Type="School" IsForeignKey="true" />
+      <Association Name="Work_ShareSpaceUser" Member="Work" ThisKey="WorkID" OtherKey="WorkID" Type="Work" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[Work]" Member="Works">
+    <Type Name="Work">
+      <Column Name="WorkID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="WorkType" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Association Name="Work_ShareHousing" Member="ShareHousings" ThisKey="WorkID" OtherKey="RequiredWorkID" Type="ShareHousing" />
+      <Association Name="Work_ShareSpaceUser" Member="ShareSpaceUsers" ThisKey="WorkID" OtherKey="WorkID" Type="ShareSpaceUser" />
+    </Type>
+  </Table>
+</Database>

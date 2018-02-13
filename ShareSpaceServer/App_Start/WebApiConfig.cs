@@ -14,6 +14,7 @@ namespace ShareSpaceServer
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+            // Convention-based routing
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
